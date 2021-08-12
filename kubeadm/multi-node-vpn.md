@@ -2,9 +2,11 @@
 
 > 서로 다른 네트워크(계정)에 있는 인스턴스를 연결하는 법
 
-- 이 문서는 Oracle Arm Ampere A1, Ubuntu 20.04를 기준으로 작성되었습니다.
-- ingress-nginx는 작성일 기준으로 정식버전에서 `networking.k8s.io/v1beta1`를 사용하고 있으므로 kubelet v1.21를 사용해야합니다. (v1.22부터 deprecated)
-- 작성일 이후 패키지 업데이트에 따라 변동이 생길 수 있습니다.
+> 이 문서는 Oracle Arm Ampere A1, Ubuntu 20.04를 기준으로 작성되었습니다.
+>
+> ingress-nginx는 작성일 기준으로 정식버전에서 `networking.k8s.io/v1beta1`를 사용하고 있으므로 kubelet v1.22 미만 버전을 사용해야합니다. (v1.22부터 deprecated)
+>
+> 작성일 이후 패키지 업데이트에 따라 변동이 생길 수 있습니다.
 
 - 방화벽 해제
   - 방화벽을 VCN에서도 관리하므로, iptables를 전부 개방하고 대시보드에서 관리하는걸 선택
@@ -32,9 +34,9 @@
     ```
     # master
     sudo kubeadm init --pod-network-cidr=10.244.0.0/16 \
-    --apiserver-advertise-address=<Master VPN IP> \
-    --control-plane-endpoint=<Master Public IP>
-    --apiserver-cert-extra-sans=<Master Public IP>,<Master Private IP>,<VPN IP>
+        --apiserver-advertise-address=<Master VPN IP> \
+        --control-plane-endpoint=<Master Public IP> \
+        --apiserver-cert-extra-sans=<Master Public IP>,<Master Private IP>,<VPN IP>
     ```
 - Flannel 설치 후 네트워크 인터페이스를 vpn으로 사용하도록 설정
     ```
@@ -109,8 +111,8 @@
       ```
   3. 변경한 DaemonSet의 `spec.template.spec`에 `hostNetwork: true` 추가
       > Worker노드마다 ingress-nginx-controller가 생성되고, 각 컨트롤러는 host(Public IP)의 트래픽을 받아서 Ingress의 설정에 따라 Service로 전달할 수 있다.
-       >
-       > Worker노드의 IP들을 도메인의 A 레코드로 등록해서 로드밸런싱을 적용할 수 있다.
+      >
+      > Worker노드의 IP들을 도메인의 A 레코드로 등록해서 로드밸런싱을 적용할 수 있다.
 
       ```
       # ...
