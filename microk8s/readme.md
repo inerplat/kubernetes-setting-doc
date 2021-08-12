@@ -77,28 +77,3 @@
     sudo netfilter-persistent reload
     ```
 
-7. 로컬에서 접속하기위한 서비스계정 만들기
-    ```
-    export ACCOUNT=develop
-    kubectl create serviceaccount $ACCOUNT
-    sleep 7 && export ACCOUNT_TOKEN_NAME=$(kubectl get secret | grep $ACCOUNT | cut -d " " -f1)
-    kubectl create rolebinding $ACCOUNT_TOKEN_NAME-binding --clusterrole=admin --serviceaccount=default:$ACCOUNT
-    export ACCOUNT_TOKEN=$(kubectl get secret $ACCOUNT_TOKEN_NAME -o jsonpath="{.data.token}" | base64 -d)
-    ```
-
-8. 로컬 kubectl 설정
-- 클러스터 환경
-    ```
-    echo $ACCOUNT_TOKEN
-    ```
-
-- 로컬
-    ```
-    kubectl config set-credentials develop --token=[클러스터에서 가져온 토큰]
-    kubectl config set-cluster microk8s-cluster --insecure-skip-tls-verify=true --server=https://[SERVER_IP_OR_DOMAIN]:16443
-    kubectl config set-context develop --cluster=microk8s-cluster --user=develop
-    kubectl config use-context develop
-
-    kubectl get node
-    ```
-

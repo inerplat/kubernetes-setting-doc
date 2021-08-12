@@ -159,13 +159,3 @@
             --discovery-token-ca-cert-hash sha256:해시해시해시해시
     ```
 
-## 대시보드
-- 배포
-    ```
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
-    ```
-- 프록시
-    ```
-    kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8080:443
-    ```
-
