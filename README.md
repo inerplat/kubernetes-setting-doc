@@ -14,3 +14,4 @@
 ## 공통
 - Ingress를 이용한 SSL인증서 발급/등록 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/ssl_certify_with_ingress.md)
 - 대시보드 적용 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/dashboard.md)
+- 로컬에서 접속하는 ServiceAccount 만들기 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/create_serviceaccount.md)
