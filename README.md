@@ -10,6 +10,7 @@
 ## Kubeadm
 - Kubeadm을 이용한 클러스터 구축 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/kubeadm/readme.md)
   - VPN을 이용한 멀티노드 클러스터 구축 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/kubeadm/multi-node-vpn.md)
+- Kubeadm join에 필요한 토큰 발급 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/kubeadm/readme.md)
 
 ## 공통
 - Ingress를 이용한 SSL인증서 발급/등록 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/ssl_certify_with_ingress.md)
