@@ -69,7 +69,6 @@
   3. kubelet 재시작
         ```
         sudo systemctl daemon-reload
-        sudo system restart kubelet
         sudo systemctl restart kubelet
         ```
   4. 모든 노드에서 작업이 완료되면 InternalIP가 vpn으로 연결된 것을 확인할 수 있다.
