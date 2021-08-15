@@ -24,3 +24,4 @@
 - 로컬에서 접속하는 ServiceAccount 만들기 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/create_serviceaccount.md)
 - 대시보드 적용 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/dashboard.md)
 - Redis Cluster 만들기 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/redis-cluster.md)
+- 클러스터에 ElasticSearch-Logstash-Kibana 올리기 [(Link)](https://github.com/inerplat/kubernetes-setting-doc/blob/main/elk.md)
