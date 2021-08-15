@@ -5,7 +5,7 @@
 > OCI에서 제공되는 K8S가 아닌, 직접 클러스터를 구축하며 경험한 내용을 다루고 있습니다.
 
 ## ※ 주의 사항
- - Oracle의 Amere A1은 linux/arm/v8 아키텍쳐를 사용합니다
+ - Oracle의 Amere A1 Free tier로 생성가능한 인스턴스는 linux/arm/v8 아키텍쳐를 사용합니다
  - pod log에서 아래와 같은 에러는 높은확률로 다른 아키텍쳐의 이미지를 사용해 발생한 문제입니다
     ```
     standard_init_linux.go:228: exec user process caused: exec format error
