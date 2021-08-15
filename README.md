@@ -6,7 +6,7 @@
 
 ## ※ 주의 사항
  - Oracle의 Amere A1 Free tier로 생성가능한 인스턴스는 linux/arm/v8 아키텍쳐를 사용합니다
- - pod log에서 아래와 같은 에러는 높은확률로 다른 아키텍쳐의 이미지를 사용해 발생한 문제입니다
+ - pod log에서 아래와 같은 에러는 주로 다른 아키텍쳐의 이미지를 사용했을때 발생하는 메시지입니다
     ```
     standard_init_linux.go:228: exec user process caused: exec format error
     ```
