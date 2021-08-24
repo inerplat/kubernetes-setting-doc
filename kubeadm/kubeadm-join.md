@@ -11,7 +11,7 @@ kubeadm join <master-host>:<master-kubelet-port> \
 
 ## 기존에 발급한 토큰 조회
 ```
-kubeadm list token
+kubeadm token list
 ```
 ```
 ubuntu@master-ubuntu-seoul:~$ kubeadm token list
@@ -22,7 +22,7 @@ TOKEN                     TTL         EXPIRES                USAGES             
 
 ## 새로운 토큰 발급
 ```
-kubeadm create token
+kubeadm token create
 ```
 
 ## cert hash 조회
