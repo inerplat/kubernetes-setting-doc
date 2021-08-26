@@ -21,7 +21,7 @@
     sudo apt-get update
     sudo apt-get install docker-ce docker-ce-cli containerd.io -y
     ```
-2. 도커 드라이버를 systemd를 사용하도록 설정
+2. (옵션) 도커 Cgroup 드라이버를 systemd 사용하도록 설정
     ```
     su
     # 패스워드 입력 (비밀번호가 설정되어 있지 않다면 sudo passwd로 설정)
