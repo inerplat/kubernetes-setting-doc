@@ -152,3 +152,5 @@
       job.batch/ingress-nginx-admission-create   1/1           2s         3h20m
       job.batch/ingress-nginx-admission-patch    1/1           3s         3h20m
      ```
+- systemd nameserver 추가 (Oracle Linux 7.x)
+  - `/run/systemd/resolve/resolv.conf`에 master node의 설정을 복사
