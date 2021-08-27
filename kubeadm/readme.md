@@ -5,9 +5,30 @@
 
 ## 공통
 
-1. 도커 설치
+1. containerd 설치
+    ```
+    cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+    overlay
+    br_netfilter
+    EOF
+
+    sudo modprobe overlay
+    sudo modprobe br_netfilter
+
+    # 필요한 sysctl 파라미터를 설정하면 재부팅 후에도 유지된다.
+    cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+    net.bridge.bridge-nf-call-iptables  = 1
+    net.ipv4.ip_forward                 = 1
+    net.bridge.bridge-nf-call-ip6tables = 1
+    EOF
+
+    # 재부팅하지 않고 sysctl 파라미터 적용
+    sudo sysctl --system
+    ```
+
     ```
     sudo apt-get update
+    
     sudo apt-get install \
         apt-transport-https \
         ca-certificates \
@@ -15,34 +36,34 @@
         gnupg \
         lsb-release -y
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    
     echo \
     "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    
     sudo apt-get update
-    sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+    
+    sudo apt-get install containerd.io -y
+    
+    sudo mkdir -p /etc/containerd
+    
+    containerd config default | sudo tee /etc/containerd/config.toml
+    
+    sudo systemctl restart containerd
     ```
-2. (옵션) 도커 Cgroup 드라이버를 systemd 사용하도록 설정
-    ```
-    su
-    # 패스워드 입력 (비밀번호가 설정되어 있지 않다면 sudo passwd로 설정)
-
-    cat > /etc/docker/daemon.json <<EOF
-    {
-      "exec-opts": ["native.cgroupdriver=systemd"],
-      "log-driver": "json-file",
-      "log-opts": {
-        "max-size": "100m"
-      },
-      "storage-driver": "overlay2"
-    }
-    EOF
-
-    sudo mkdir -p /etc/systemd/system/docker.service.d
-    sudo systemctl daemon-reload
-    sudo systemctl restart docker
-
-    exit
-    ```
+    
+2. (옵션) containerd Cgroup 드라이버를 systemd 사용하도록 설정 (노드에 kubernetes외의 리소스를 잡아먹는 프로세스를 돌릴 때 매우 권장됨)
+    - /etc/containerd/config.toml에 SystemdGroup 옵션을 넣는다
+        ```
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          ...
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+        ```
+    - containerd 재시작
+        ```
+        sudo systemctl restart containerd
+        ```
 
 3. swap 메모리 제거
     ```
@@ -159,3 +180,45 @@
             --discovery-token-ca-cert-hash sha256:해시해시해시해시
     ```
 
+
+---
+(deprecated) kubrenetes에서 도커런타임을 사용하는 경우
+
+1. 도커 설치
+    ```
+    sudo apt-get update
+    sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release -y
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo \
+    "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+    ```
+2. (옵션) 도커 Cgroup 드라이버를 systemd 사용하도록 설정
+    ```
+    su
+    # 패스워드 입력 (비밀번호가 설정되어 있지 않다면 sudo passwd로 설정)
+
+    cat > /etc/docker/daemon.json <<EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2"
+    }
+    EOF
+
+    sudo mkdir -p /etc/systemd/system/docker.service.d
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+
+    exit
+    ```
