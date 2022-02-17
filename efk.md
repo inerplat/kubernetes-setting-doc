@@ -1,4 +1,4 @@
-# 클러스터에 ElasticSearch-Logstash-Kibana 올리기
+# 클러스터에 ElasticSearch-Fluentd-Kibana 올리기
 
 > 이 문서는 https://lahuman.github.io/kubernetes-logging/ 를 기반으로 arm/v8에 적용하기 위한 yaml파일을 다룹니다
 
