@@ -10,19 +10,15 @@
 
 2. 계정 토큰명 확인
     ```
-    # create serviceaccount가 완료된 뒤에 실행 (5초정도 소요됨)
+    # create serviceaccount가 완료된 뒤에 실행
     export ACCOUNT_TOKEN_NAME=$(kubectl get secret | grep $ACCOUNT | cut -d " " -f1)
     echo $ACCOUNT_TOKEN_NAME
     ```
 
-3. 계정에 클러스터 롤 바인딩 (ex. 계정에 admin롤 바인딩)
-    - microk8s
-        ```
-        kubectl create rolebinding $ACCOUNT_TOKEN_NAME-binding --clusterrole=admin --serviceaccount=default:$ACCOUNT
-        ```
+3. 계정에 클러스터 롤 바인딩 (ex. 계정에 cluster-admin롤 바인딩)
     - kubeadm
         ```
-         kubectl create clusterrolebinding $ACCOUNT_TOKEN_NAME-binding --clusterrole=admin --serviceaccount=default:$ACCOUNT
+         kubectl create clusterrolebinding $ACCOUNT_TOKEN_NAME-binding --clusterrole=cluster-admin --serviceaccount=default:$ACCOUNT
         ```
 
 4. 발급된 토큰 확인
@@ -40,11 +36,11 @@
     # 클러스터에서 발급한 토큰을 사용
     kubectl config set-credentials develop --token=[클러스터에서 가져온 토큰]
 
-    # 클러스터 이름 설정 (ex. 클러스터 이름이 microk8s-cluster인 경우)
-    kubectl config set-cluster microk8s-cluster --insecure-skip-tls-verify=true --server=https://[SERVER_IP_OR_DOMAIN]:16443
+    # 클러스터 이름 설정 (ex. 클러스터 이름이 kubernetes인 경우)
+    kubectl config set-cluster kubernetes --insecure-skip-tls-verify=true --server=https://[SERVER_IP_OR_DOMAIN]:6443
 
     # context에 user, cluster 설정 및 적용
-    kubectl config set-context develop --cluster=microk8s-cluster --user=develop
+    kubectl config set-context develop --cluster=kubernetes --user=develop
     kubectl config use-context develop
     ```
 
