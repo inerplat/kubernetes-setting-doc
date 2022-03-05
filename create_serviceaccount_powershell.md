@@ -1,17 +1,17 @@
-# 로컬에서 kubectl을 사용하기 위한 ServiceAccount 발급
+# 로컬에서 kubectl을 사용하기 위한 ServiceAccount 발급 (PowerShell)
 
 > kubectl은 로컬 개발환경에서 사용하기 위해서는 .kube/config를 이용하는것 보다는, ServiceAccount에 ClusterRole를 바인딩해서 사용하는것이 권장된다.
 
 1. 계정 생성 (ex. develop이름의 계정 생성)
     ```
-    ACCOUNT=develop
+    $ACCOUNT = develop
     kubectl create serviceaccount $ACCOUNT   
     ```
 
 2. 계정 토큰명 확인
     ```
     # create serviceaccount가 완료된 뒤에 실행
-    ACCOUNT_TOKEN_NAME=$(kubectl get secret | grep $ACCOUNT | cut -d " " -f1)
+    $ACCOUNT_TOKEN_NAME =  $(kubectl get secret | select-string $ACCOUNT | out-string | % {$_.split(" ")[0].Replace("`n", "").Replace("`r", "")})
     echo $ACCOUNT_TOKEN_NAME
     ```
 
@@ -22,15 +22,14 @@
 
 4. 발급된 토큰 확인
     ```
-    eACCOUNT_TOKEN=$(kubectl get secret $ACCOUNT_TOKEN_NAME -o jsonpath="{.data.token}" | base64 -d)
-    echo $ACCOUNT_TOKEN
+    [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($(kubectl get secret $ACCOUNT_TOKEN_NAME -o jsonpath="{.data.token}")))
     ```
 
 
 ## 로컬 kubectl에 cluster 및 context 설정
 
 - 아래의 명령어는 스크립트로 만들면 개발환경에서 편리하게 클러스터를 변경할 수 있다
-    - microk8s는 기본 클러스터이름으로 `microk8s-cluster`, kubeadm은 `kubernetes`를 사용한다. 클러스터 이름을 변경했다면 수정이 필요하다
+    - microk8s는 기본 클러스터이름으로 `microk8s-cluster`, kubeadm은 `kubernetes`, minikube는 `minikube` 를 사용한다. 클러스터 이름을 변경했다면 수정이 필요하다
     ```
     # 클러스터에서 발급한 토큰을 사용
     kubectl config set-credentials develop --token=[클러스터에서 가져온 토큰]
